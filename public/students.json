@@ -1,0 +1,26 @@
+[
+  {
+    "studentId": "S001",
+    "studentName": "Alice Smith",
+    "number": "123-456-7890",
+    "address": "123 Main St",
+    "emailId": "alice@example.com",
+    "password": "password123"
+  },
+  {
+    "studentId": "S002",
+    "studentName": "Bob Johnson",
+    "number": "987-654-3210",
+    "address": "456 Oak Ave",
+    "emailId": "bob@example.com",
+    "password": "password123"
+  },
+  {
+    "studentId": "S003",
+    "studentName": "Charlie Brown",
+    "number": "555-123-4567",
+    "address": "789 Pine Ln",
+    "emailId": "charlie@example.com",
+    "password": "password123"
+  }
+]
