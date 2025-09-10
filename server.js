@@ -37,7 +37,7 @@ const upload = multer({ storage: storage });
 
 // MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, { dbName: "libraryDB", tls: true })
+  .connect(process.env.MONGO_URI, { dbName: "libraryDB", tls: true, serverSelectionTimeoutMS: 30000 })
   .then(async () => {
     console.log("✅ MongoDB connected");
 
@@ -72,6 +72,15 @@ mongoose
     console.log("✅ MongoDB connected");
   })
   .catch((err) => console.error("❌ MongoDB error:", err));
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', function() {
+  console.log("✅ MongoDB connection is open");
+});
+db.on('disconnected', function() {
+    console.log('Mongoose default connection disconnected');
+});
 
 // Schemas
 const BookSchema = new mongoose.Schema({
