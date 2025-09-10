@@ -456,12 +456,17 @@ app.use(express.static('public'));
 
 // Serve React in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "dist")));
+  const distPath = path.join(process.cwd(), 'dist');
+  console.log(`Serving static files from: ${distPath}`);
 
-  // 👇 use a safe wildcard
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
-  });
+  if (fs.existsSync(distPath)) {
+    app.use(express.static(distPath));
+    app.get(/.*/, (req, res) => {
+      res.sendFile(path.join(distPath, "index.html"));
+    });
+  } else {
+    console.error(`Error: 'dist' directory not found at ${distPath}`);
+  }
 }
 
 
