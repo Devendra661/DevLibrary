@@ -10,8 +10,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "NODE_ENV=production node server.js",
-    "postinstall": "npm run build"
+    "start": "npm run build && NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
