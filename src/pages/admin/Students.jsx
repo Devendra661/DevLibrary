@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StudentForm from "../../components/StudentForm.jsx";
 import { toast } from 'react-toastify';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
+
+  // Fetch existing students on component mount
+  useEffect(() => {
+    fetch("https://devlibrary-3.onrender.com/api/students")
+      .then(res => res.json())
+      .then(data => setStudents(data))
+      .catch(err => {
+        console.error("Error fetching students:", err);
+        toast.error("Failed to load students");
+      });
+  }, []);
 
   const handleAddStudent = (student) => {
     setStudents([...students, student]);
@@ -21,13 +32,17 @@ export default function Students() {
           “Education is the most powerful weapon which you can use to change the world.”
         </p>
       </div>
+
+      {/* Student Form */}
       <StudentForm onSubmit={handleAddStudent} />
+
+      {/* Student List */}
       <div className="mt-6">
         <h2 className="text-xl font-bold mb-2">All Students</h2>
         <ul className="space-y-2">
           {students.map((s, i) => (
             <li key={i} className="p-2 border rounded">
-              {s.name} (ID: {s.studentId}) - {s.mobile}
+              {s.studentName} (ID: {s.studentId}) - {s.number || s.mobile || "N/A"}
             </li>
           ))}
         </ul>
