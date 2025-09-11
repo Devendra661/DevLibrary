@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
 import StudentForm from "../../components/StudentForm.jsx";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export default function Students() {
   const [students, setStudents] = useState([]);
 
-  // Fetch existing students on component mount
+  // Fetch existing students from backend on mount
   useEffect(() => {
-    fetch("https://devlibrary-3.onrender.com/api/students")
-      .then(res => res.json())
+    const apiUrl = import.meta.env.VITE_API_URL || "https://devlibrary-3.onrender.com/api";
+
+    fetch(`${apiUrl}/students`)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+        return res.json();
+      })
       .then(data => setStudents(data))
       .catch(err => {
         console.error("Error fetching students:", err);
-        toast.error("Failed to load students");
+        toast.error("Failed to load students from server");
       });
   }, []);
 
+  // Add new student locally after submission
   const handleAddStudent = (student) => {
     setStudents([...students, student]);
     toast.success("Student added and ID card issued!");
