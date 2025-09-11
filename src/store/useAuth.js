@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const API_BASE = import.meta.env.VITE_API_URL; // Render backend URL
+const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, ""); // Remove trailing slash if any
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -8,7 +8,7 @@ export const useAuthStore = create((set) => ({
 
   // Initialize auth state from localStorage
   init: () => {
-    const user = JSON.parse(localStorage.getItem('user')) || null;
+    const user = JSON.parse(localStorage.getItem("user")) || null;
     set({ user, isAuthReady: true });
   },
 
@@ -16,31 +16,26 @@ export const useAuthStore = create((set) => ({
   login: async (username, password) => {
     try {
       const res = await fetch(`${API_BASE}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
 
       if (!res.ok) {
-        const errorData = await res.json();
-        console.error('Login failed:', errorData.message || res.statusText);
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Login failed:", errorData.message || res.statusText);
         return null;
       }
 
       const user = await res.json();
       set({ user });
 
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('user');
-      }
+      if (user) localStorage.setItem("user", JSON.stringify(user));
+      else localStorage.removeItem("user");
 
       return user;
     } catch (err) {
-      console.error('Login error:', err);
+      console.error("Login error:", err);
       return null;
     }
   },
@@ -48,7 +43,7 @@ export const useAuthStore = create((set) => ({
   // Logout
   logout: () => {
     set({ user: null });
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
   },
 
   // Update profile locally
@@ -59,31 +54,27 @@ export const useAuthStore = create((set) => ({
 
   // Refresh user from backend
   refreshUser: async () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user) return;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user || !user.username) return;
+
+    let endpoint = "";
+    if (user.role === "student") endpoint = `${API_BASE}/students/${user.username}`;
+    else if (user.role === "librarian") endpoint = `${API_BASE}/librarians/${user.username}`;
+    else return;
 
     try {
-      let endpoint = '';
-      if (user.role === 'student' && user.username) {
-        endpoint = `${API_BASE}/students/${user.username}`;
-      } else if (user.role === 'librarian' && user.username) {
-        endpoint = `${API_BASE}/librarians/${user.username}`;
-      } else {
-        return;
-      }
-
-      const res = await fetch(endpoint);
+      const res = await fetch(endpoint, { headers: { "Content-Type": "application/json" } });
       if (!res.ok) {
-        console.error('Failed to refresh user data:', res.statusText);
+        console.error("Failed to refresh user data:", res.statusText);
         return;
       }
 
       const updatedUser = await res.json();
       const mergedUser = { ...user, ...updatedUser };
       set({ user: mergedUser });
-      localStorage.setItem('user', JSON.stringify(mergedUser));
+      localStorage.setItem("user", JSON.stringify(mergedUser));
     } catch (error) {
-      console.error('Error refreshing user data:', error);
+      console.error("Error refreshing user data:", error);
     }
   },
 }));
