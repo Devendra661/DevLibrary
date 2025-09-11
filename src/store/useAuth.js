@@ -1,58 +1,89 @@
 import { create } from "zustand";
 
+const API_BASE = import.meta.env.VITE_API_URL; // Render backend URL
+
 export const useAuthStore = create((set) => ({
   user: null,
   isAuthReady: false,
+
+  // Initialize auth state from localStorage
   init: () => {
     const user = JSON.parse(localStorage.getItem('user')) || null;
     set({ user, isAuthReady: true });
   },
+
+  // Login
   login: async (username, password) => {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    if (!res.ok) {
-      // Handle HTTP errors, e.g., 401 Unauthorized
-      const errorData = await res.json();
-      console.error('Login failed:', errorData.message);
+    try {
+      const res = await fetch(`${API_BASE}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error('Login failed:', errorData.message || res.statusText);
+        return null;
+      }
+
+      const user = await res.json();
+      set({ user });
+
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('user');
+      }
+
+      return user;
+    } catch (err) {
+      console.error('Login error:', err);
       return null;
     }
-    const user = await res.json();
-    set({ user: user || null });
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-    }
-    return user;
   },
+
+  // Logout
   logout: () => {
     set({ user: null });
     localStorage.removeItem('user');
   },
-  updateProfile: (updatedFields) => set((state) => ({
-    user: state.user ? { ...state.user, ...updatedFields } : null,
-  })),
+
+  // Update profile locally
+  updateProfile: (updatedFields) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, ...updatedFields } : null,
+    })),
+
+  // Refresh user from backend
   refreshUser: async () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.role === 'student' && user.username) {
-      try {
-        const res = await fetch(`/api/students/${user.username}`);
-        if (res.ok) {
-          const updatedStudent = await res.json();
-          set({ user: { ...user, ...updatedStudent } }); // Merge with existing user data
-          localStorage.setItem('user', JSON.stringify({ ...user, ...updatedStudent }));
-        } else {
-          console.error('Failed to refresh student data:', res.statusText);
-        }
-      } catch (error) {
-        console.error('Error refreshing student data:', error);
+    if (!user) return;
+
+    try {
+      let endpoint = '';
+      if (user.role === 'student' && user.username) {
+        endpoint = `${API_BASE}/students/${user.username}`;
+      } else if (user.role === 'librarian' && user.username) {
+        endpoint = `${API_BASE}/librarians/${user.username}`;
+      } else {
+        return;
       }
+
+      const res = await fetch(endpoint);
+      if (!res.ok) {
+        console.error('Failed to refresh user data:', res.statusText);
+        return;
+      }
+
+      const updatedUser = await res.json();
+      const mergedUser = { ...user, ...updatedUser };
+      set({ user: mergedUser });
+      localStorage.setItem('user', JSON.stringify(mergedUser));
+    } catch (error) {
+      console.error('Error refreshing user data:', error);
     }
-    // Add logic for librarian or other roles if needed
   },
 }));
