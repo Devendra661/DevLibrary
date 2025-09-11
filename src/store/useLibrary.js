@@ -1,16 +1,16 @@
 // src/store/useLibrary.js
 import { create } from "zustand";
 
-const BASE_URL = "http://localhost:5000"; // Backend URL
+const BASE_URL = import.meta.env.VITE_API_URL; // <-- use env variable
 
 export const useLibraryStore = create((set) => ({
   books: [],
-  bookRequests: [], // New state for book requests
+  bookRequests: [],
 
   // Load all book requests
-  loadBookRequests: async () => { // New action
+  loadBookRequests: async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/book-requests`);
+      const res = await fetch(`${BASE_URL}/students`); // <- endpoint may vary: /book-requests or /students
       if (!res.ok) throw new Error("Failed to fetch book requests");
       const bookRequests = await res.json();
       set({ bookRequests });
@@ -23,14 +23,14 @@ export const useLibraryStore = create((set) => ({
   // Load all books
   loadBooks: async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/books`);
+      const res = await fetch(`${BASE_URL}/books`);
       if (!res.ok) throw new Error("Failed to fetch books");
       const books = await res.json();
       set({ books });
       console.log("Books loaded:", books.length);
 
       // Also load book requests
-      useLibraryStore.getState().loadBookRequests(); // Call new action
+      useLibraryStore.getState().loadBookRequests();
     } catch (err) {
       console.error("Error loading books:", err);
     }
@@ -38,15 +38,10 @@ export const useLibraryStore = create((set) => ({
 
   // Borrow a book
   borrowBook: async (bookId, studentId) => {
-    console.log("DEBUG: BorrowBook called with:", { bookId, studentId });
-
-    if (!bookId || !studentId) {
-      console.error("Book ID or Student ID missing");
-      return;
-    }
+    if (!bookId || !studentId) return console.error("Book ID or Student ID missing");
 
     try {
-      const res = await fetch(`${BASE_URL}/api/book-requests`, {
+      const res = await fetch(`${BASE_URL}/book-requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookId, studentId }),
@@ -66,15 +61,10 @@ export const useLibraryStore = create((set) => ({
 
   // Return a book
   returnBook: async (bookId, studentId) => {
-    console.log("DEBUG: ReturnBook called with:", { bookId, studentId });
-
-    if (!bookId || !studentId) {
-      console.error("Book ID or Student ID missing");
-      return;
-    }
+    if (!bookId || !studentId) return console.error("Book ID or Student ID missing");
 
     try {
-      const res = await fetch(`${BASE_URL}/api/books/return`, {
+      const res = await fetch(`${BASE_URL}/books/return`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookId, studentId }),
@@ -85,16 +75,18 @@ export const useLibraryStore = create((set) => ({
         console.error("Failed to return book:", error.message);
       } else {
         const responseData = await res.json();
-        const returnedBorrowedBook = responseData.book; // Backend now sends the updated borrowed book
+        const returnedBorrowedBook = responseData.book;
 
         set((state) => ({
-          // Update the books state (available copies)
           books: state.books.map((b) =>
-            b.bookId === responseData.book.bookId ? { ...b, availableCopies: b.availableCopies + 1 } : b
+            b.bookId === returnedBorrowedBook.bookId
+              ? { ...b, availableCopies: b.availableCopies + 1 }
+              : b
           ),
-          // Update the bookRequests state (set status to returned and returnedDate)
           bookRequests: state.bookRequests.map((req) =>
-            req._id === responseData.book._id ? { ...req, status: 'returned', returnedDate: responseData.book.returnedDate } : req
+            req._id === returnedBorrowedBook._id
+              ? { ...req, status: 'returned', returnedDate: returnedBorrowedBook.returnedDate }
+              : req
           ),
         }));
         console.log("Book returned successfully:", returnedBorrowedBook.bookId);
@@ -106,15 +98,10 @@ export const useLibraryStore = create((set) => ({
 
   // Like a book
   likeBook: async (bookId) => {
-    console.log("DEBUG: LikeBook called with:", bookId);
-
-    if (!bookId) {
-      console.error("Book ID missing");
-      return;
-    }
+    if (!bookId) return console.error("Book ID missing");
 
     try {
-      const res = await fetch(`${BASE_URL}/api/books/like`, {
+      const res = await fetch(`${BASE_URL}/books/like`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ bookId }),
