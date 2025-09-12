@@ -6,7 +6,7 @@ export default function BookCard({ book, onMoreClick }) {
   return (
     <div className="bg-white rounded-2xl shadow-lg p-4 flex flex-col items-center text-center h-full justify-between transform transition-transform hover:-translate-y-1 hover:shadow-2xl duration-300">
       {/* Book Cover - full width */}
-      <img
+            <img
         src={`${import.meta.env.VITE_API_URL}${book.coverImageUrl}`}
         alt={book.title}
         className="w-full h-64 object-contain rounded-xl mb-4 shadow-md"
