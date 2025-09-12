@@ -133,4 +133,16 @@ export const useLibraryStore = create((set) => ({
   addStudent: (student) => {
     set((state) => ({ students: [student, ...state.students] }));
   },
+
+  loadStudents: async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/students`);
+      if (!res.ok) throw new Error("Failed to fetch students");
+      const students = await res.json();
+      set({ students });
+      console.log("Students loaded:", students.length);
+    } catch (err) {
+      console.error("Error loading students:", err);
+    }
+  },
 }));
