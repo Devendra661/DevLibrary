@@ -51,7 +51,7 @@ export default function Sidebar({ links, isOpen, toggleSidebar, isCollapsed }) {
           >
             {user.image && (
               <img
-                src={user.image}
+                src={`${import.meta.env.VITE_API_URL.replace("/api", "")}${user.image}`}
                 alt="Profile"
                 className="w-8 h-8 rounded-full object-cover border-2 border-white"
               />

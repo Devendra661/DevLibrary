@@ -83,7 +83,7 @@ export default function IDCardPage() {
               <div className="w-32 h-32 md:w-36 md:h-36 rounded-full border-2 border-red-500 flex items-center justify-center overflow-hidden bg-gray-200">
                 {displayUser.image ? (
                   <img
-                    src={displayUser.image}
+                    src={`${import.meta.env.VITE_API_URL.replace("/api", "")}${displayUser.image}`}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
