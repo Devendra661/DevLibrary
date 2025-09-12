@@ -351,7 +351,9 @@ app.post("/api/books", upload.single('coverImage'), async (req, res) => {
 app.delete("/api/books/:bookId", async (req, res) => {
   try {
     const { bookId } = req.params;
+    console.log(`Attempting to delete book with bookId: ${bookId}`);
     const deletedBook = await Book.findOneAndDelete({ bookId });
+    console.log(`Result of findOneAndDelete for bookId ${bookId}: ${deletedBook}`);
 
     if (!deletedBook) {
       return res.status(404).json({ message: "Book not found" });
