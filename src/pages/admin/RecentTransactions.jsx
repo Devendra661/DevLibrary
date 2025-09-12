@@ -44,7 +44,7 @@ export default function RecentTransactions() {
           dueDate,
           returnedDate,
           studentName: student?.studentName || "Unknown Student",
-          studentImage: student?.image || "https://via.placeholder.com/150/FF8C00/FFFFFF?text=User",
+          studentImage: student?.image || "https://placehold.co/150x150/FF8C00/FFFFFF?text=User",
         });
       });
 

@@ -81,7 +81,7 @@ export default function Profile() {
           <img
             src={
               displayUser?.image ||
-              "https://via.placeholder.com/150/FF8C00/FFFFFF?text=User"
+              "https://placehold.co/150x150/FF8C00/FFFFFF?text=User"
             }
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover mb-6 border-4 border-orange-500 shadow-md mx-auto"
