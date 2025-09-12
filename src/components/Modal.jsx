@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart } from "react-icons/fa";
 
 export default function Modal({ isOpen, onClose, children, selectedBook, onBorrow, onLike, onDelete }) {
-  console.log("onDelete prop in Modal:", onDelete);
   if (!isOpen) return null;
 
   const isAvailable = selectedBook?.availableCopies > 0;
