@@ -121,6 +121,7 @@ export default function StudentTable() {
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {index + 1}
                   </td>
+                  
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {student.studentId}
                   </td>

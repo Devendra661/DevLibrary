@@ -97,7 +97,7 @@ export default function Profile() {
         >
           <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-orange-400 to-red-500 flex items-center justify-center shadow-lg mb-4">
             <img
-              src={displayUser?.image}
+              src={`${import.meta.env.VITE_API_URL.replace("/api", "")}${displayUser?.image}`}
               alt="student"
               className="w-24 h-24 rounded-full object-cover"
             />
