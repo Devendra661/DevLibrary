@@ -10,7 +10,7 @@ export const useLibraryStore = create((set) => ({
   // Load all book requests
   loadBookRequests: async () => {
     try {
-      const res = await fetch(`${BASE_URL}/students`); // <- endpoint may vary: /book-requests or /students
+      const res = await fetch(`${BASE_URL}/book-requests`);
       if (!res.ok) throw new Error("Failed to fetch book requests");
       const bookRequests = await res.json();
       set({ bookRequests });
@@ -53,6 +53,7 @@ export const useLibraryStore = create((set) => ({
       } else {
         const data = await res.json();
         console.log("Book requested successfully:", data);
+        useLibraryStore.getState().loadBookRequests();
       }
     } catch (err) {
       console.error("Network error while requesting book:", err);
