@@ -6,6 +6,7 @@ const BASE_URL = import.meta.env.VITE_API_URL; // <-- use env variable
 export const useLibraryStore = create((set) => ({
   books: [],
   bookRequests: [],
+  students: [],
 
   // Load all book requests
   loadBookRequests: async () => {
@@ -123,5 +124,13 @@ export const useLibraryStore = create((set) => ({
     } catch (err) {
       console.error("Network error while liking book:", err);
     }
+  },
+
+  addBook: (book) => {
+    set((state) => ({ books: [book, ...state.books] }));
+  },
+
+  addStudent: (student) => {
+    set((state) => ({ students: [student, ...state.students] }));
   },
 }));

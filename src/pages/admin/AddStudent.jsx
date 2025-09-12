@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import StudentForm from '../../components/StudentForm'; // Import StudentForm
 import { toast } from 'react-toastify';
+import { useLibraryStore } from '../../store/useLibrary.js';
 
 export default function AddStudent() {
+  const { addStudent } = useLibraryStore();
   const handleSubmit = async (formData) => { // Accept formData directly
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/students`, {
@@ -13,6 +15,8 @@ export default function AddStudent() {
       });
 
       if (res.ok) {
+        const newStudent = await res.json();
+        addStudent(newStudent);
         toast.success('Student added successfully!');
         // StudentForm will handle its own state reset
       } else {

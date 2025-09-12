@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { useLibraryStore } from "../../store/useLibrary.js";
 
 export default function AddBook() {
+  const { addBook } = useLibraryStore();
   const [bookData, setBookData] = useState({
     title: "",
     author: "",
@@ -53,6 +55,8 @@ export default function AddBook() {
       });
 
       if (res.ok) {
+        const newBook = await res.json();
+        addBook(newBook);
         toast.success("Book added successfully!");
         setBookData({
           title: "",
