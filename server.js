@@ -21,7 +21,14 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Middleware
-app.use(cors({ origin: "https://devlib.netlify.app" }));
+app.use(cors({
+  origin: [
+    "https://devlib.netlify.app",
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://localhost:3001"
+  ]
+}));
 app.use(express.json());
 
 // Multer configuration for file uploads

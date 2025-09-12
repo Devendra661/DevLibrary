@@ -128,7 +128,7 @@ export default function StudentTable() {
                     {index + 1}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
-                    <img src={student.image || "https://placehold.co/50x50"} alt={student.studentName} className="w-10 h-10 rounded-full object-cover" />
+                    <img src={`${import.meta.env.VITE_API_URL}${student.image}` || "https://placehold.co/50x50"} alt={student.studentName} className="w-10 h-10 rounded-full object-cover" />
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {student.studentName}
