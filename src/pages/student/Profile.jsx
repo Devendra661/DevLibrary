@@ -96,11 +96,7 @@ export default function Profile() {
           className="bg-gradient-to-br from-orange-50 via-white to-orange-100 rounded-2xl shadow-md overflow-hidden p-4 border border-orange-200 flex flex-col items-center"
         >
           <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-orange-400 to-red-500 flex items-center justify-center shadow-lg mb-4">
-            <img
-              src={displayUser?.image}
-              alt="student"
-              className="w-24 h-24 rounded-full object-cover"
-            />
+            
           </div>
           <h1 className="text-3xl font-extrabold text-orange-600 drop-shadow-[0_0_6px_orangered]">
             {displayUser?.studentName || "Student"}

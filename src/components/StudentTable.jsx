@@ -96,9 +96,6 @@ export default function StudentTable() {
                   Sr No.
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Image
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Name
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -128,9 +125,6 @@ export default function StudentTable() {
                     {index + 1}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
-                    <img src={`${import.meta.env.VITE_API_URL.replace("/api", "")}${student.image}` || "https://placehold.co/50x50"} alt={student.studentName} className="w-10 h-10 rounded-full object-cover" />
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {student.studentName}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
@@ -145,7 +139,7 @@ export default function StudentTable() {
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {student.address}
                   </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
+                  <td className="py-2 px-4 border-b border-gray-200 text-sm text.gray-900">
                     {student.password}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">

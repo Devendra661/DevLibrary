@@ -116,7 +116,7 @@ export default function RecentTransactions() {
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     <div className="flex items-center">
-                      <img src={record.studentImage} alt={record.studentName} className="w-8 h-8 rounded-full mr-2 object-cover" />
+                      
                       <div>
                         <p className="font-semibold">{record.studentName}</p>
                         <p className="text-xs text-gray-500">{record.studentId}</p>
