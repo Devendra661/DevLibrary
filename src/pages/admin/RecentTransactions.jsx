@@ -44,7 +44,6 @@ export default function RecentTransactions() {
           dueDate,
           returnedDate,
           studentName: student?.studentName || "Unknown Student",
-          studentImage: student?.image || "https://placehold.co/150x150/FF8C00/FFFFFF?text=User",
         });
       });
 
@@ -116,7 +115,6 @@ export default function RecentTransactions() {
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     <div className="flex items-center">
-                      
                       <div>
                         <p className="font-semibold">{record.studentName}</p>
                         <p className="text-xs text-gray-500">{record.studentId}</p>

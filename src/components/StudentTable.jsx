@@ -96,9 +96,6 @@ export default function StudentTable() {
                   Sr No.
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Name
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Student ID
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -123,9 +120,6 @@ export default function StudentTable() {
                 <tr key={student._id} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {index + 1}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
-                    {student.studentName}
                   </td>
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {student.studentId}
