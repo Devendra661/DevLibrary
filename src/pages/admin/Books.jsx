@@ -25,6 +25,25 @@ export default function Books() {
     setSelectedBook(null);
   };
 
+  const handleDeleteBook = async (bookId) => {
+    if (window.confirm("Are you sure you want to delete this book?")) {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        loadBooks(); // Reload books after deletion
+        toast.success("Book deleted successfully!");
+      } catch (error) {
+        toast.error("Failed to delete book: " + error.message);
+      }
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -74,6 +93,12 @@ export default function Books() {
             className="bg-white rounded-xl p-4 shadow-md border border-gray-200 transition-all duration-300"
           >
             <BookCard book={book} onMoreClick={handleMoreClick} />
+            <button
+              onClick={() => handleDeleteBook(book.bookId)}
+              className="mt-2 w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition-colors"
+            >
+              Delete
+            </button>
           </motion.div>
         ))}
       </motion.div>

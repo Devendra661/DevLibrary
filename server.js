@@ -348,6 +348,22 @@ app.post("/api/books", upload.single('coverImage'), async (req, res) => {
 
 
 
+app.delete("/api/books/:bookId", async (req, res) => {
+  try {
+    const { bookId } = req.params;
+    const deletedBook = await Book.findOneAndDelete({ bookId });
+
+    if (!deletedBook) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+
+    res.json({ message: "Book deleted successfully", deletedBook });
+  } catch (error) {
+    console.error("Error deleting book:", error);
+    res.status(500).json({ message: "Server error deleting book" });
+  }
+});
+
 app.post("/api/books/return", async (req, res) => {
   const { bookId, studentId } = req.body;
   try {
