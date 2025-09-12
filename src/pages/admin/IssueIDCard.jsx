@@ -17,7 +17,7 @@ export default function IssueIDCard() {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const res = await fetch('/api/students');
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/students`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }

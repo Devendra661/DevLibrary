@@ -13,7 +13,7 @@ export default function RecentTransactions() {
     // Fetch students data
     const fetchStudents = async () => {
       try {
-        const res = await fetch("/api/students");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/students`);
         if (!res.ok) throw new Error("Failed to fetch students");
         const studentsData = await res.json();
         setStudents(studentsData);

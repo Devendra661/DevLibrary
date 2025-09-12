@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 export default function AddStudent() {
   const handleSubmit = async (formData) => { // Accept formData directly
     try {
-      const res = await fetch('/api/students', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/students`, {
         method: 'POST',
         body: formData, // Send FormData directly
         // No Content-Type header needed for FormData

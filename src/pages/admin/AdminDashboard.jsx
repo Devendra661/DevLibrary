@@ -14,7 +14,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadBooks(); // This loads all books and all book requests into the store
-    fetch("/api/students")
+    fetch(`${import.meta.env.VITE_API_URL}/students`)
       .then(res => res.json())
       .then(data => setTotalStudents(data.length));
   }, []);

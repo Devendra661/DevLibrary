@@ -47,7 +47,7 @@ export default function AddBook() {
     }
 
     try {
-      const res = await fetch("/api/books", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/books`, {
         method: "POST",
         body: formData,
       });

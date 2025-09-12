@@ -5,13 +5,13 @@ export default function BookRequests() {
   const [bookRequests, setBookRequests] = useState([]);
 
   useEffect(() => {
-    fetch("/api/book-requests")
+    fetch(`${import.meta.env.VITE_API_URL}/book-requests`)
       .then((res) => res.json())
       .then((data) => setBookRequests(data));
   }, []);
 
   const handleApprove = (id) => {
-    fetch(`/api/book-requests/${id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/book-requests/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "approved" }),
@@ -25,7 +25,7 @@ export default function BookRequests() {
   };
 
   const handleReject = (id) => {
-    fetch(`/api/book-requests/${id}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/book-requests/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "rejected" }),
@@ -39,7 +39,7 @@ export default function BookRequests() {
   };
 
   const handleReturn = (bookId, studentId, requestId) => {
-    fetch(`/api/books/return`, {
+    fetch(`${import.meta.env.VITE_API_URL}/books/return`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ bookId, studentId }),

@@ -11,7 +11,7 @@ export default function StudentTable() {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch("/api/students");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/students`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -43,7 +43,7 @@ export default function StudentTable() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
       try {
-        const response = await fetch(`/api/students/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/students/${id}`, {
           method: 'DELETE',
         });
 

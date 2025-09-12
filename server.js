@@ -239,7 +239,7 @@ app.put("/api/book-requests/:id", async (req, res) => {
   }
 });
 
-app.get("/api/students", async (req, res) => {
+app.get(`${import.meta.env.VITE_API_URL}/students`, async (req, res) => {
   try {
     const students = await Student.find();
     res.json(students);
@@ -249,7 +249,7 @@ app.get("/api/students", async (req, res) => {
   }
 });
 
-app.get("/api/students/:studentId", async (req, res) => {
+app.get(`${import.meta.env.VITE_API_URL}/students:studentId`, async (req, res) => {
   try {
     const { studentId } = req.params;
     const student = await Student.findOne({ studentId });
@@ -263,7 +263,7 @@ app.get("/api/students/:studentId", async (req, res) => {
   }
 });
 
-app.put("/api/students/:studentId", async (req, res) => {
+app.put(`${import.meta.env.VITE_API_URL}/students:studentId`, async (req, res) => {
   try {
     const { studentId } = req.params;
     const { oldPassword, password, ...otherUpdates } = req.body;
@@ -295,7 +295,7 @@ app.put("/api/students/:studentId", async (req, res) => {
   }
 });
 
-app.delete("/api/students/:id", async (req, res) => {
+app.delete(`${import.meta.env.VITE_API_URL}/students:id`, async (req, res) => {
   try {
     const { id } = req.params;
     const deletedStudent = await Student.findByIdAndDelete(id);
@@ -418,7 +418,7 @@ app.put("/api/notifications/:id/read", async (req, res) => {
   }
 });
 
-app.post("/api/students", upload.single('image'), async (req, res) => {
+app.post(`${import.meta.env.VITE_API_URL}/students`, upload.single('image'), async (req, res) => {
   try {
     const studentData = { ...req.body };
     if (req.file) {
