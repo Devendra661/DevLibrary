@@ -93,18 +93,18 @@ export default function Books() {
             className="bg-white rounded-xl p-4 shadow-md border border-gray-200 transition-all duration-300"
           >
             <BookCard book={book} onMoreClick={handleMoreClick} />
-            <button
-              onClick={() => handleDeleteBook(book.bookId)}
-              className="mt-2 w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition-colors"
-            >
-              Delete
-            </button>
+            
           </motion.div>
         ))}
       </motion.div>
 
       {/* Modal */}
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        selectedBook={selectedBook}
+        onDelete={handleDeleteBook}
+      >
         {selectedBook && (
           <div className="flex flex-col items-center text-center">
             <img

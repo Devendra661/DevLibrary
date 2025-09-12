@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart } from "react-icons/fa";
 
-export default function Modal({ isOpen, onClose, children, selectedBook, onBorrow, onLike }) {
+export default function Modal({ isOpen, onClose, children, selectedBook, onBorrow, onLike, onDelete }) {
   if (!isOpen) return null;
 
   const isAvailable = selectedBook?.availableCopies > 0;
@@ -113,6 +113,31 @@ export default function Modal({ isOpen, onClose, children, selectedBook, onBorro
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
                     <FaHeart /> Like
+                  </motion.button>
+                )}
+
+                {/* Delete Button */}
+                {onDelete && (
+                  <motion.button
+                    onClick={() => onDelete(selectedBook.bookId)}
+                    className="px-6 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 border border-red-700"
+                    whileHover={{
+                      scale: 1.08,
+                      rotateX: -5,
+                      rotateY: 5,
+                      boxShadow:
+                        "0px 20px 35px rgba(0,0,0,0.35), inset 0px 2px 6px rgba(255,255,255,0.2)",
+                    }}
+                    whileTap={{
+                      scale: 0.95,
+                      rotateX: 0,
+                      rotateY: 0,
+                      boxShadow:
+                        "0px 8px 15px rgba(0,0,0,0.2), inset 0px 1px 3px rgba(255,255,255,0.2)",
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  >
+                    Delete
                   </motion.button>
                 )}
               </div>
