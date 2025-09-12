@@ -19,7 +19,7 @@ export default function IDCardPage() {
     const fetchStudentData = async () => {
       if (user && user.username) {
         try {
-          const response = await fetch(`/api/students/${user.username}`);
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/students/${user.username}`);
           if (response.ok) {
             const data = await response.json();
             setStudentData(data);
