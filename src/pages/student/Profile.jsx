@@ -4,7 +4,7 @@ import { User, Mail, Phone, MapPin, IdCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
-export default function Profile() {
+export default function StudentProfile() {
   const { user, refreshUser } = useAuthStore();
   const [studentProfileData, setStudentProfileData] = useState(null);
 
@@ -14,7 +14,9 @@ export default function Profile() {
     const fetchStudentProfile = async () => {
       if (user && user.username && user.role === "student") {
         try {
-          const response = await fetch(`${import.meta.env.VITE_API_URL}/students/${user.username}`);
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL}/students/${user.username}`
+          );
           if (response.ok) {
             const data = await response.json();
             setStudentProfileData(data);
@@ -42,6 +44,7 @@ export default function Profile() {
           “The future belongs to those who believe in the beauty of their dreams.”
         </p>
       </div>
+
       {/* Two card layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl px-6">
         {/* Left Card: Overview */}
@@ -55,7 +58,11 @@ export default function Profile() {
           className="bg-gradient-to-br from-orange-50 via-white to-orange-100 rounded-2xl shadow-md overflow-hidden p-4 border border-orange-200 flex flex-col items-center"
         >
           <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-orange-400 to-red-500 flex items-center justify-center shadow-lg mb-4">
-            <img src={displayUser?.image} alt="student" className="w-24 h-24 rounded-full object-cover"/>
+            <img
+              src={displayUser?.image}
+              alt="student"
+              className="w-24 h-24 rounded-full object-cover"
+            />
           </div>
           <h1 className="text-3xl font-extrabold text-orange-600 drop-shadow-[0_0_6px_orangered]">
             {displayUser?.studentName || "Student"}
@@ -77,9 +84,14 @@ export default function Profile() {
         >
           <div className="space-y-4">
             <ProfileField
+              icon={<User className="text-blue-600" />}
+              label="Name"
+              value={displayUser?.studentName || "N/A"}
+            />
+            <ProfileField
               icon={<IdCard className="text-purple-600" />}
               label="Student ID"
-              value={displayUser?.studentId}
+              value={displayUser?.studentId || "N/A"}
             />
             <ProfileField
               icon={<Mail className="text-green-600" />}

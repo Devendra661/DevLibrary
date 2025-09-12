@@ -24,6 +24,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use(cors({
   origin: [
     "https://devlib.netlify.app",
+    "https://erp-devlibrary.netlify.app",
     "https://devlibrary-3.onrender.com/api",
     "http://localhost:5173",
     "http://localhost:3000",
