@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import BookCard from "../../components/BookCard.jsx";
 import Modal from "../../components/Modal.jsx";
 import { FaHeart } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function Books() {
   const { books, loadBooks } = useLibraryStore();
@@ -37,6 +38,7 @@ export default function Books() {
         }
 
         loadBooks(); // Reload books after deletion
+        handleCloseModal(); // Close modal after deletion
         toast.success("Book deleted successfully!");
       } catch (error) {
         toast.error("Failed to delete book: " + error.message);
