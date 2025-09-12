@@ -3,10 +3,12 @@ import { useAuthStore } from "../../store/useAuth.js";
 import { User, Mail, Phone, MapPin, IdCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Modal from "../../components/Modal.jsx";
 
-export default function StudentProfile() {
+export default function Profile() {
   const { user, refreshUser } = useAuthStore();
   const [studentProfileData, setStudentProfileData] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     refreshUser();
@@ -32,6 +34,42 @@ export default function StudentProfile() {
   }, [user, refreshUser]);
 
   const displayUser = studentProfileData || user;
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const oldPassword = formData.get("oldPassword");
+    const newPassword = formData.get("newPassword");
+    const confirmPassword = formData.get("confirmPassword");
+
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/students/${user.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ oldPassword, password: newPassword }),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Password updated successfully!");
+        setIsEditModalOpen(false);
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to update password.");
+      }
+    } catch (error) {
+      toast.error("Error updating password: " + error.message);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -70,6 +108,12 @@ export default function StudentProfile() {
           <p className="mt-4 italic text-gray-500 text-sm text-center">
             “The beautiful thing about learning is that no one can take it away from you.”
           </p>
+          <button
+            onClick={() => setIsEditModalOpen(true)}
+            className="mt-6 px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg shadow hover:shadow-[0_0_12px_orangered] transition"
+          >
+            Update Password
+          </button>
         </motion.div>
 
         {/* Right Card: Details */}
@@ -111,6 +155,35 @@ export default function StudentProfile() {
           </div>
         </motion.div>
       </div>
+
+      {/* Edit Profile Modal */}
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        <h2 className="text-2xl font-bold mb-6">Update Password</h2>
+        <form onSubmit={handleUpdatePassword} className="space-y-4">
+          <InputField label="Old Password" name="oldPassword" type="password" />
+          <InputField label="New Password" name="newPassword" type="password" />
+          <InputField
+            label="Confirm New Password"
+            name="confirmPassword"
+            type="password"
+          />
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(false)}
+              className="px-4 py-2 bg-gray-300 rounded-lg shadow hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg shadow hover:shadow-[0_0_10px_orangered]"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
@@ -132,5 +205,25 @@ function ProfileField({ icon, label, value }) {
         <p className="text-lg font-semibold text-gray-800">{value}</p>
       </div>
     </motion.div>
+  );
+}
+
+// Reusable input field
+function InputField({ label, name, type }) {
+  return (
+    <div>
+      <label
+        htmlFor={name}
+        className="block text-gray-700 text-sm font-bold mb-2"
+      >
+        {label}:
+      </label>
+      <input
+        type={type}
+        id={name}
+        name={name}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+      />
+    </div>
   );
 }
