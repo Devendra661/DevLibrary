@@ -311,6 +311,8 @@ app.put("/api/students/:studentId", async (req, res) => {
 app.put("/api/students/update/:studentId", upload.single('image'), async (req, res) => {
   try {
     const { studentId } = req.params;
+    console.log("Updating student with studentId:", studentId);
+    console.log("Request body:", req.body);
     const student = await Student.findOne({ studentId });
 
     if (!student) {
@@ -329,6 +331,7 @@ app.put("/api/students/update/:studentId", upload.single('image'), async (req, r
       student.image = `/uploads/${req.file.filename}`;
     }
 
+    console.log("Updated student object before saving:", student);
     await student.save();
     res.json({ message: "Student updated successfully", student });
   } catch (error) {
