@@ -184,6 +184,25 @@ export const useLibraryStore = create((set) => ({
     set((state) => ({ students: [student, ...state.students] }));
   },
 
+  updateStudent: async (studentId, formData) => {
+    try {
+      const res = await fetch(`${BASE_URL}/students/update/${studentId}`, {
+        method: "PUT",
+        body: formData,
+      });
+      if (!res.ok) throw new Error("Failed to update student");
+      const updatedStudent = await res.json();
+      set((state) => ({
+        students: state.students.map((s) =>
+          s.studentId === updatedStudent.student.studentId ? updatedStudent.student : s
+        ),
+      }));
+    } catch (err) {
+      console.error("Error updating student:", err);
+      throw err;
+    }
+  },
+
   loadStudents: async () => {
     try {
       const res = await fetch(`${BASE_URL}/students`);

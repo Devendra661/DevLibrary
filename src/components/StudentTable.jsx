@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaUser, FaEnvelope, FaPhone, FaIdCard } from "react-icons/fa";
+import Modal from "./Modal";
+import EditStudent from "../pages/admin/EditStudent";
 
 export default function StudentTable() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
+  const handleEditClick = (student) => {
+    setSelectedStudent(student);
+    setIsEditModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -140,9 +149,15 @@ export default function StudentTable() {
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     <button
                       onClick={() => handleDelete(student._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded-md text-xs transition-colors duration-300"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded-md text-xs transition-colors duration-300 mr-2"
                     >
                       Delete
+                    </button>
+                    <button
+                      onClick={() => handleEditClick(student)}
+                      className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded-md text-xs transition-colors duration-300"
+                    >
+                      Edit
                     </button>
                   </td>
                 </tr>
@@ -151,6 +166,12 @@ export default function StudentTable() {
           </table>
         </div>
       )}
+
+      <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
+        {selectedStudent && (
+          <EditStudent student={selectedStudent} onClose={() => setIsEditModalOpen(false)} />
+        )}
+      </Modal>
     </motion.div>
   );
 }

@@ -308,6 +308,35 @@ app.put("/api/students/:studentId", async (req, res) => {
   }
 });
 
+app.put("/api/students/update/:studentId", upload.single('image'), async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const student = await Student.findOne({ studentId });
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    const updates = req.body;
+    for (const key in updates) {
+      if (key === 'password' && !updates[key]) {
+        continue; // Skip password update if it is empty
+      }
+      student[key] = updates[key];
+    }
+
+    if (req.file) {
+      student.image = `/uploads/${req.file.filename}`;
+    }
+
+    await student.save();
+    res.json({ message: "Student updated successfully", student });
+  } catch (error) {
+    console.error("Error updating student:", error);
+    res.status(500).json({ message: "Server error updating student" });
+  }
+});
+
 app.delete(`${import.meta.env.VITE_API_URL}/students:id`, async (req, res) => {
   try {
     const { id } = req.params;

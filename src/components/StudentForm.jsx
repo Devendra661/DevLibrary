@@ -3,14 +3,14 @@ import QRCode from "react-qr-code"; // ✅ updated library
 import { motion } from "framer-motion";
 import { toast } from 'react-toastify';
 
-export default function StudentForm({ onSubmit }) {
-  const [studentId, setStudentId] = useState("");
-  const [name, setName] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [address, setAddress] = useState("");
-  const [emailId, setEmailId] = useState(""); // New state
-  const [password, setPassword] = useState(""); // New state
-  const [profilePic, setProfilePic] = useState(null);
+export default function StudentForm({ onSubmit, student }) {
+  const [studentId, setStudentId] = useState(student ? student.studentId : "");
+  const [name, setName] = useState(student ? student.studentName : "");
+  const [mobile, setMobile] = useState(student ? student.number : "");
+  const [address, setAddress] = useState(student ? student.address : "");
+  const [emailId, setEmailId] = useState(student ? student.emailId : "");
+  const [password, setPassword] = useState(""); // Don't pre-fill password
+  const [profilePic, setProfilePic] = useState(student ? student.image : null);
   const [flipped, setFlipped] = useState(false);
 
   const fileInputRef = useRef(null); // Declare fileInputRef here
@@ -184,7 +184,7 @@ export default function StudentForm({ onSubmit }) {
         type="submit"
         className="w-full py-2.5 px-4 rounded-md font-bold bg-orange-500 hover:bg-orange-600 text-white shadow-[0_0_8px_orangered] transition-transform transform hover:scale-105 text-sm"
       >
-        Add Student
+        {student ? "Update Student" : "Add Student"}
       </button>
     </form>
   );
