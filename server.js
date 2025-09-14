@@ -78,6 +78,10 @@ mongoose
         console.log(`Book ID counter initialized to: ${counter.seq}`);
     }
 
+    // Log all books from the database
+    const allBooks = await Book.find();
+    console.log("All books in DB:", allBooks.map(b => b.bookId));
+
     console.log("✅ MongoDB connected");
   })
   .catch((err) => console.error("❌ MongoDB error:", err));
