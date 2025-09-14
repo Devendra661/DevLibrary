@@ -401,6 +401,7 @@ app.delete("/api/books/:bookId", async (req, res) => {
 
 app.post("/api/books/return", async (req, res) => {
   const { bookId, studentId } = req.body;
+  console.log("Return book request received:", { bookId, studentId });
   try {
     const book = await Book.findOne({ bookId });
     if (!book) return res.status(404).json({ message: "Book not found" });
@@ -414,6 +415,8 @@ app.post("/api/books/return", async (req, res) => {
       { status: 'returned', returnedDate: new Date() }, // Set status to 'returned' and set returnedDate
       { new: true }
     );
+
+    console.log("BookRequest findOneAndUpdate result:", bookRequest);
 
     if (!bookRequest) {
       return res.status(404).json({ message: "Approved BookRequest not found or already returned." });
