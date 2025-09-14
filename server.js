@@ -352,12 +352,20 @@ app.post("/api/books", upload.single('coverImage'), async (req, res) => {
 
 
 
-app.delete("/api/books/:bookId", async (req, res) => {
+app.delete("/api/books/:identifier", async (req, res) => {
   try {
-    const { bookId } = req.params;
-    console.log(`Attempting to delete book with bookId: ${bookId}`);
-    const deletedBook = await Book.findOneAndDelete({ bookId });
-    console.log(`Result of findOneAndDelete for bookId ${bookId}: ${deletedBook}`);
+    const { identifier } = req.params;
+    console.log(`Attempting to delete book with identifier: ${identifier}`);
+
+    // Try deleting by custom bookId
+    let deletedBook = await Book.findOneAndDelete({ bookId: identifier });
+
+    // If not found, try deleting by MongoDB _id
+    if (!deletedBook) {
+      deletedBook = await Book.findByIdAndDelete(identifier);
+    }
+
+    console.log(`Result of delete for identifier ${identifier}:`, deletedBook);
 
     if (!deletedBook) {
       return res.status(404).json({ message: "Book not found" });
