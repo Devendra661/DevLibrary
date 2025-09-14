@@ -124,16 +124,30 @@ export const useLibraryStore = create((set) => ({
     }
   },
 
-  // ✅ Delete book (API + state update)
+  // ✅ Delete book (API + state update) - fixed to send bookId in body
   deleteBook: async (bookId) => {
     try {
-      const url = `${BASE_URL}/books/${bookId}`;
+      if (!bookId) throw new Error("Book ID missing");
+
+      console.log("bookId in deleteBook:", bookId, typeof bookId);
+      const url = `${BASE_URL}/books`;
       console.log("Deleting book at URL:", url);
-      const res = await fetch(url, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete book");
+
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookId }), // 👈 send in body
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to delete book");
+      }
+
       set((state) => ({
         books: state.books.filter((b) => b.bookId !== bookId),
       }));
+
       console.log("Book deleted:", bookId);
     } catch (err) {
       console.error("Error deleting book:", err);

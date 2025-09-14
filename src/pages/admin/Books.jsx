@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import UpdateBook from "./UpdateBook.jsx";
 
 export default function Books() {
-  const { books, loadBooks, deleteBook } = useLibraryStore();
+  const { books, loadBooks } = useLibraryStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
@@ -33,12 +33,13 @@ export default function Books() {
     setSelectedBook(null);
   };
 
+  // ✅ fixed: always expect only bookId
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
         await useLibraryStore.getState().deleteBook(bookId);
-        loadBooks(); // Reload books after deletion
-        handleCloseModal(); // Close modal after deletion
+        loadBooks(); // reload books
+        handleCloseModal(); // close modal
         toast.success("Book deleted successfully!");
       } catch (error) {
         toast.error("Failed to delete book: " + error.message);
@@ -47,7 +48,7 @@ export default function Books() {
   };
 
   const handleUpdateBook = (book) => {
-    setSelectedBook(book); // ✅ keep full book object
+    setSelectedBook(book); // keep full book object
     setIsUpdateModalOpen(true);
     setIsModalOpen(false);
   };
@@ -81,6 +82,7 @@ export default function Books() {
         </p>
       </div>
 
+      {/* Books Grid */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         variants={containerVariants}
@@ -95,7 +97,7 @@ export default function Books() {
               scale: 1.05,
               y: -8,
               boxShadow:
-                "0px 0px 15px rgba(245, 245, 245, 0.8), 0px 0px 25px rgba(245, 245, 245, 0.6)", // whitesmoke glow
+                "0px 0px 15px rgba(245, 245, 245, 0.8), 0px 0px 25px rgba(245, 245, 245, 0.6)", // ✅ whitesmoke glow
             }}
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
             className="bg-white rounded-xl p-4 shadow-md border border-gray-200 transition-all duration-300"
@@ -110,7 +112,7 @@ export default function Books() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         selectedBook={selectedBook}
-        onDelete={() => handleDeleteBook(selectedBook)} // ✅ pass full book
+        onDelete={() => handleDeleteBook(selectedBook?.bookId)} // ✅ only pass bookId
       >
         {selectedBook && (
           <div className="flex flex-col items-center text-center">
@@ -157,7 +159,7 @@ export default function Books() {
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-red-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-red-600 transition-all"
-                onClick={() => handleDeleteBook(selectedBook)} // ✅ pass book
+                onClick={() => handleDeleteBook(selectedBook.bookId)} // ✅ only bookId
               >
                 Delete
               </motion.button>
@@ -170,7 +172,7 @@ export default function Books() {
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-green-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-green-600 transition-all"
-                onClick={() => handleUpdateBook(selectedBook)} // ✅ pass book
+                onClick={() => handleUpdateBook(selectedBook)} // pass full object
               >
                 Update
               </motion.button>
