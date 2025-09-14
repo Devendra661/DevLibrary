@@ -27,6 +27,7 @@ export const useLibraryStore = create((set) => ({
       const res = await fetch(`${BASE_URL}/books`);
       if (!res.ok) throw new Error("Failed to fetch books");
       const books = await res.json();
+      console.log("Loaded Books:", books);
       set({ books });
       console.log("Books loaded:", books.length);
 
