@@ -92,8 +92,19 @@ export default function AddBook() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="grid grid-cols-1 rounded-xl shadow-[0_0_10px_rgba(255,69,0,0.25)] overflow-hidden"
+        className="grid grid-cols-1 md:grid-cols-2 rounded-xl shadow-[0_0_10px_rgba(255,69,0,0.25)] overflow-hidden"
       >
+        {/* Left full image section */}
+        <div
+          className="hidden md:block bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('/add_book.jpg')",
+            minHeight: "400px",
+          }}
+        ></div>
+
+        {/* Right side form */}
         <div className="p-6 bg-white text-black">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
