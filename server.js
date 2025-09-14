@@ -329,7 +329,7 @@ app.put("/api/students/update/:studentId", async (req, res) => {
   }
 });
 
-app.delete(`${import.meta.env.VITE_API_URL}/students:id`, async (req, res) => {
+app.delete("/api/students/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedStudent = await Student.findByIdAndDelete(id);
@@ -344,6 +344,7 @@ app.delete(`${import.meta.env.VITE_API_URL}/students:id`, async (req, res) => {
     res.status(500).json({ message: "Server error deleting student" });
   }
 });
+
 
 app.post("/api/books", upload.single('coverImage'), async (req, res) => {
   try {
