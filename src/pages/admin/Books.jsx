@@ -33,11 +33,20 @@ export default function Books() {
     setSelectedBook(null);
   };
 
-  const handleDeleteBook = async (book) => {
+  const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        await deleteBook(book._id); // ✅ use _id instead of bookId
-        handleCloseModal();
+        const trimmedBookId = bookId.trim();
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${trimmedBookId}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        loadBooks(); // Reload books after deletion
+        handleCloseModal(); // Close modal after deletion
         toast.success("Book deleted successfully!");
       } catch (error) {
         toast.error("Failed to delete book: " + error.message);
