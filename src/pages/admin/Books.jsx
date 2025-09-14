@@ -33,10 +33,10 @@ export default function Books() {
     setSelectedBook(null);
   };
 
-  const handleDeleteBook = async (bookId) => {
+  const handleDeleteBook = async (book) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        await deleteBook(bookId);
+        await deleteBook(book._id); // ✅ use _id instead of bookId
         handleCloseModal();
         toast.success("Book deleted successfully!");
       } catch (error) {
@@ -46,7 +46,7 @@ export default function Books() {
   };
 
   const handleUpdateBook = (book) => {
-    setSelectedBook(book.bookId);
+    setSelectedBook(book); // ✅ keep full book object
     setIsUpdateModalOpen(true);
     setIsModalOpen(false);
   };
@@ -88,7 +88,7 @@ export default function Books() {
       >
         {books.map((book) => (
           <motion.div
-            key={book.bookId}
+            key={book._id} // ✅ use Mongo _id as React key
             variants={itemVariants}
             whileHover={{
               scale: 1.05,
@@ -109,7 +109,7 @@ export default function Books() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         selectedBook={selectedBook}
-        onDelete={handleDeleteBook}
+        onDelete={() => handleDeleteBook(selectedBook)} // ✅ pass full book
       >
         {selectedBook && (
           <div className="flex flex-col items-center text-center">
@@ -156,7 +156,7 @@ export default function Books() {
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-red-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-red-600 transition-all"
-                onClick={() => handleDeleteBook(selectedBook.bookId)}
+                onClick={() => handleDeleteBook(selectedBook)} // ✅ pass book
               >
                 Delete
               </motion.button>
@@ -169,7 +169,7 @@ export default function Books() {
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="bg-green-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-green-600 transition-all"
-                onClick={() => handleUpdateBook(selectedBook)}
+                onClick={() => handleUpdateBook(selectedBook)} // ✅ pass book
               >
                 Update
               </motion.button>
@@ -181,7 +181,7 @@ export default function Books() {
       {/* Update Book Modal */}
       <Modal isOpen={isUpdateModalOpen} onClose={handleCloseUpdateModal}>
         {selectedBook && (
-          <UpdateBook bookId={selectedBook} onClose={handleCloseUpdateModal} />
+          <UpdateBook bookId={selectedBook._id} onClose={handleCloseUpdateModal} />
         )}
       </Modal>
     </div>
