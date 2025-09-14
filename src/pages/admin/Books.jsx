@@ -19,6 +19,7 @@ export default function Books() {
   }, []);
 
   const handleMoreClick = (book) => {
+    console.log("Selected Book:", book);
     setSelectedBook(book);
     setIsModalOpen(true);
   };
