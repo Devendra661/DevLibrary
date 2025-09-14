@@ -378,15 +378,11 @@ app.delete("/api/books/:bookId", async (req, res) => {
     const { bookId } = req.params;
     console.log(`Attempting to delete book with bookId: "${bookId}"`);
 
-    // Explicit match (case-sensitive)
     let deletedBook = await Book.findOneAndDelete({ bookId: bookId });
 
-    // Try again case-insensitive if not found
     if (!deletedBook) {
       deletedBook = await Book.findOneAndDelete({ bookId: new RegExp(`^${bookId}$`, "i") });
     }
-
-    console.log("Deleted book result:", deletedBook);
 
     if (!deletedBook) {
       return res.status(404).json({ message: "Book not found" });
@@ -398,6 +394,7 @@ app.delete("/api/books/:bookId", async (req, res) => {
     res.status(500).json({ message: "Server error deleting book" });
   }
 });
+
 
 
 app.post("/api/books/return", async (req, res) => {
