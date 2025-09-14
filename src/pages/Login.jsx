@@ -1,5 +1,5 @@
 // src/pages/Login.jsx
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuth.js";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,6 +10,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
+
+  const usernameRef = useRef(null);
+
+  // Auto-focus username field on page load
+  useEffect(() => {
+    usernameRef.current?.focus();
+  }, []);
 
   const handleLogin = async () => {
     const user = await login(username, password);
@@ -91,48 +98,59 @@ export default function Login() {
               Login
             </h2>
 
-            <input
-              className="input w-full mb-4 sm:mb-5 p-3 sm:p-4 rounded-lg border-2 border-gray-300
-                         focus:outline-none focus:ring-2 focus:ring-blue-400
-                         hover:shadow-lg hover:shadow-blue-400/40 transition-all duration-300"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-
-            <input
-              type="password"
-              className="input w-full mb-4 sm:mb-5 p-3 sm:p-4 rounded-lg border-2 border-gray-300
-                         focus:outline-none focus:ring-2 focus:ring-blue-400
-                         hover:shadow-lg hover:shadow-blue-400/40 transition-all duration-300"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-
-            <motion.button
-              whileHover={{
-                scale: 1.05,
-                boxShadow:
-                  "0px 8px 15px rgba(59,130,246,0.4), inset 0px -3px 0px rgba(255,255,255,0.3)",
-                y: -2,
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                await handleLogin();
               }}
-              whileTap={{
-                scale: 0.97,
-                boxShadow:
-                  "0px 4px 8px rgba(59,130,246,0.3), inset 0px 3px 3px rgba(255,255,255,0.2)",
-                y: 2,
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="w-full p-3 sm:p-4 text-base sm:text-lg md:text-lg font-semibold rounded-lg
-                         bg-gradient-to-r from-blue-500 to-blue-600 text-white
-                         shadow-md hover:shadow-blue-400/50
-                         transform perspective-1000
-                         transition-all duration-300"
-              onClick={handleLogin}
+              className="flex flex-col"
             >
-              Login
-            </motion.button>
+              <input
+                ref={usernameRef}
+                className="input w-full mb-4 sm:mb-5 p-3 sm:p-4 rounded-lg border-2 border-gray-300
+                           focus:outline-none focus:ring-2 focus:ring-blue-400
+                           hover:shadow-lg hover:shadow-blue-400/40 transition-all duration-300"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                enterKeyHint="next"
+              />
+
+              <input
+                type="password"
+                className="input w-full mb-4 sm:mb-5 p-3 sm:p-4 rounded-lg border-2 border-gray-300
+                           focus:outline-none focus:ring-2 focus:ring-blue-400
+                           hover:shadow-lg hover:shadow-blue-400/40 transition-all duration-300"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                enterKeyHint="go"
+              />
+
+              <motion.button
+                type="submit"
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow:
+                    "0px 8px 15px rgba(59,130,246,0.4), inset 0px -3px 0px rgba(255,255,255,0.3)",
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                  boxShadow:
+                    "0px 4px 8px rgba(59,130,246,0.3), inset 0px 3px 3px rgba(255,255,255,0.2)",
+                  y: 2,
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="w-full p-3 sm:p-4 text-base sm:text-lg md:text-lg font-semibold rounded-lg
+                           bg-gradient-to-r from-blue-500 to-blue-600 text-white
+                           shadow-md hover:shadow-blue-400/50
+                           transform perspective-1000
+                           transition-all duration-300"
+              >
+                Login
+              </motion.button>
+            </form>
           </div>
         </motion.div>
       </motion.div>
