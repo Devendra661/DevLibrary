@@ -70,76 +70,82 @@ export default function StudentForm({ onSubmit, student }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="studentId" className="block text-sm font-semibold text-black">Student ID</label>
-        <input
-          type="text"
-          id="studentId"
-          name="studentId"
-          className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-          required
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="studentId" className="block text-sm font-semibold text-black">Student ID</label>
+          <input
+            type="text"
+            id="studentId"
+            name="studentId"
+            className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="name" className="block text-sm font-semibold text-black">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
       </div>
-      <div>
-        <label htmlFor="name" className="block text-sm font-semibold text-black">Name</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="mobile" className="block text-sm font-semibold text-black">Mobile Number</label>
+          <input
+            type="text"
+            id="mobile"
+            name="mobile"
+            className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="address" className="block text-sm font-semibold text-black">Address</label>
+          <textarea
+            id="address"
+            name="address"
+            className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          ></textarea>
+        </div>
       </div>
-      <div>
-        <label htmlFor="mobile" className="block text-sm font-semibold text-black">Mobile Number</label>
-        <input
-          type="text"
-          id="mobile"
-          name="mobile"
-          className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          value={mobile}
-          onChange={(e) => setMobile(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="address" className="block text-sm font-semibold text-black">Address</label>
-        <textarea
-          id="address"
-          name="address"
-          className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        ></textarea>
-      </div>
-      <div>
-        <label htmlFor="emailId" className="block text-sm font-semibold text-black">Email ID</label>
-        <input
-          type="email"
-          id="emailId"
-          name="emailId"
-          className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          value={emailId}
-          onChange={(e) => setEmailId(e.target.value)}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="password" className="block text-sm font-semibold text-black">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="emailId" className="block text-sm font-semibold text-black">Email ID</label>
+          <input
+            type="email"
+            id="emailId"
+            name="emailId"
+            className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={emailId}
+            onChange={(e) => setEmailId(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="password" className="block text-sm font-semibold text-black">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
       </div>
 
       {/* Profile Photo Upload */}

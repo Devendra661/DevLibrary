@@ -62,87 +62,82 @@ export default function UpdateBook({ book, onClose }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="grid grid-cols-1 md:grid-cols-2 rounded-xl shadow-[0_0_10px_rgba(255,69,0,0.25)] overflow-hidden"
+        className="grid grid-cols-1 rounded-xl shadow-[0_0_10px_rgba(255,69,0,0.25)] overflow-hidden"
       >
-        <div
-          className="hidden md:block bg-cover bg-center"
-          style={{
-            backgroundImage:
-              `url(${bookData.coverImageUrl || '/add_book.jpg'})`,
-            minHeight: "400px",
-          }}
-        ></div>
-
         <div className="p-6 bg-white text-black">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label
-                htmlFor="title"
-                className="block text-sm font-semibold text-black"
-              >
-                Title
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={bookData.title}
-                onChange={handleChange}
-                required
-                className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-semibold text-black"
+                >
+                  Title
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={bookData.title}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="author"
+                  className="block text-sm font-semibold text-black"
+                >
+                  Author
+                </label>
+                <input
+                  type="text"
+                  id="author"
+                  name="author"
+                  value={bookData.author}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="author"
-                className="block text-sm font-semibold text-black"
-              >
-                Author
-              </label>
-              <input
-                type="text"
-                id="author"
-                name="author"
-                value={bookData.author}
-                onChange={handleChange}
-                required
-                className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-              />
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-semibold text-black"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={bookData.description}
+                  onChange={handleChange}
+                  className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                  rows="3"
+                ></textarea>
+              </div>
 
-            <div>
-              <label
-                htmlFor="description"
-                className="block text-sm font-semibold text-black"
-              >
-                Description
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={bookData.description}
-                onChange={handleChange}
-                className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                rows="3"
-              ></textarea>
-            </div>
-
-            <div>
-              <label
-                htmlFor="category"
-                className="block text-sm font-semibold text-black"
-              >
-                Category
-              </label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                value={bookData.category}
-                onChange={handleChange}
-                className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-              />
+              <div>
+                <label
+                  htmlFor="category"
+                  className="block text-sm font-semibold text-black"
+                >
+                  Category
+                </label>
+                <input
+                  type="text"
+                  id="category"
+                  name="category"
+                  value={bookData.category}
+                  onChange={handleChange}
+                  className="mt-1 w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
