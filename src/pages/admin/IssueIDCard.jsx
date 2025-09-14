@@ -12,7 +12,7 @@ export default function IssueIDCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [flipped, setFlipped] = useState(false);
-  
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -36,6 +36,17 @@ export default function IssueIDCard() {
     fetchStudents();
   }, []);
 
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    const foundStudent = students.find(
+      (s) =>
+        s.studentId.toLowerCase().includes(term.toLowerCase()) ||
+        s.studentName.toLowerCase().includes(term.toLowerCase())
+    );
+    setSelectedStudent(foundStudent || null);
+  };
+
   if (loading) return <p>Loading students...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
   if (students.length === 0) return <p>No students found. Add students to issue ID cards.</p>;
@@ -56,25 +67,19 @@ export default function IssueIDCard() {
         </p>
       </div>
 
-      {/* Student Selection Dropdown */}
-      <div className="mb-6 w-full max-w-md">
-        <label htmlFor="student-select" className="block text-gray-700 text-sm font-bold mb-2">Select Student:</label>
-        <select
-          id="student-select"
-          className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          value={selectedStudent ? selectedStudent.studentId : ''}
-          onChange={(e) => {
-            const foundStudent = students.find(s => s.studentId === e.target.value);
-            setSelectedStudent(foundStudent);
-          }}
-        >
-          {students.map(s => (
-            <option key={s.studentId} value={s.studentId}>
-              {s.studentName} ({s.studentId})
-            </option>
-          ))}
-        </select>
+      {/* Search Bar */}
+      <div className="mb-6 w-full max-w-md relative">
+        <input
+          type="text"
+          placeholder="Search by Student ID or Name..."
+          className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+        <FaIdCard className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
       </div>
+
+
 
       <motion.div
         className="w-[300px] md:w-[350px] lg:w-[400px] h-[550px] md:h-[600px] lg:h-[650px] perspective cursor-pointer"
