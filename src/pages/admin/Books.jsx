@@ -6,10 +6,12 @@ import BookCard from "../../components/BookCard.jsx";
 import Modal from "../../components/Modal.jsx";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
+import UpdateBook from "./UpdateBook.jsx";
 
 export default function Books() {
   const { books, loadBooks } = useLibraryStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
@@ -23,6 +25,11 @@ export default function Books() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setSelectedBook(null);
+  };
+
+  const handleCloseUpdateModal = () => {
+    setIsUpdateModalOpen(false);
     setSelectedBook(null);
   };
 
@@ -44,6 +51,12 @@ export default function Books() {
         toast.error("Failed to delete book: " + error.message);
       }
     }
+  };
+
+  const handleUpdateBook = (book) => {
+    setSelectedBook(book.bookId);
+    setIsUpdateModalOpen(true);
+    setIsModalOpen(false);
   };
 
   const containerVariants = {
@@ -143,32 +156,41 @@ export default function Books() {
               </span>
             </div>
 
-            {/* Borrow Button with hover neon */}
-            {selectedBook.availableCopies > 0 && (
+            <div className="flex gap-4">
+              {/* Delete Button */}
               <motion.button
                 whileHover={{
                   scale: 1.1,
-                  boxShadow: "0 0 15px rgba(255, 69, 0, 0.8)",
+                  boxShadow: "0 0 15px rgba(255, 0, 0, 0.8)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-orange-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-orange-600 transition-all"
-                onClick={() => {
-                  const studentId = localStorage.getItem("studentId");
-                  if (!studentId) {
-                    alert("You must be logged in to borrow a book.");
-                    return;
-                  }
-                  useLibraryStore
-                    .getState()
-                    .borrowBook(selectedBook.bookId, studentId);
-                  alert("Book request sent!");
-                  handleCloseModal();
-                }}
+                className="bg-red-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-red-600 transition-all"
+                onClick={() => handleDeleteBook(selectedBook.bookId)}
               >
-                Borrow
+                Delete
               </motion.button>
-            )}
+
+              {/* Update Button */}
+              <motion.button
+                whileHover={{
+                  scale: 1.1,
+                  boxShadow: "0 0 15px rgba(0, 255, 0, 0.8)",
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-green-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-green-600 transition-all"
+                onClick={() => handleUpdateBook(selectedBook)}
+              >
+                Update
+              </motion.button>
+            </div>
           </div>
+        )}
+      </Modal>
+
+      {/* Update Book Modal */}
+      <Modal isOpen={isUpdateModalOpen} onClose={handleCloseUpdateModal}>
+        {selectedBook && (
+          <UpdateBook bookId={selectedBook} onClose={handleCloseUpdateModal} />
         )}
       </Modal>
     </div>

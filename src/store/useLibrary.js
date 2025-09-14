@@ -130,6 +130,14 @@ export const useLibraryStore = create((set) => ({
     set((state) => ({ books: [book, ...state.books] }));
   },
 
+  updateBook: (updatedBook) => {
+    set((state) => ({
+      books: state.books.map((book) =>
+        book.bookId === updatedBook.bookId ? updatedBook : book
+      ),
+    }));
+  },
+
   addStudent: (student) => {
     set((state) => ({ students: [student, ...state.students] }));
   },
