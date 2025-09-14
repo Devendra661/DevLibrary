@@ -1,38 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useLibraryStore } from "../../store/useLibrary.js";
 
-export default function UpdateBook({ bookId, onClose }) {
+export default function UpdateBook({ book, onClose }) {
   const { updateBook } = useLibraryStore();
-  const [bookData, setBookData] = useState({
-    title: "",
-    author: "",
-    description: "",
-    category: "",
-    availableCopies: 0,
-    likes: 0,
-  });
+  const [bookData, setBookData] = useState(book);
   const [coverImageFile, setCoverImageFile] = useState(null);
 
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    const fetchBookData = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`);
-        if (response.ok) {
-          const book = await response.json();
-          setBookData(book);
-        } else {
-          toast.error("Failed to fetch book data.");
-        }
-      } catch (error) {
-        toast.error("An error occurred: " + error.message);
-      }
-    };
-    fetchBookData();
-  }, [bookId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,20 +42,9 @@ export default function UpdateBook({ bookId, onClose }) {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`, {
-        method: "PUT",
-        body: formData,
-      });
-
-      if (res.ok) {
-        const updatedBook = await res.json();
-        updateBook(updatedBook);
-        toast.success("Book updated successfully!");
-        onClose();
-      } else {
-        const errorData = await res.json();
-        toast.error(errorData.message || "Failed to update book.");
-      }
+      await updateBook(formData);
+      toast.success("Book updated successfully!");
+      onClose();
     } catch (error) {
       toast.error("An error occurred: " + error.message);
     }

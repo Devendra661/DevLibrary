@@ -36,15 +36,7 @@ export default function Books() {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        console.log(typeof bookId);
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
+        await useLibraryStore.getState().deleteBook(bookId);
         loadBooks(); // Reload books after deletion
         handleCloseModal(); // Close modal after deletion
         toast.success("Book deleted successfully!");
@@ -190,7 +182,7 @@ export default function Books() {
       {/* Update Book Modal */}
       <Modal isOpen={isUpdateModalOpen} onClose={handleCloseUpdateModal}>
         {selectedBook && (
-          <UpdateBook bookId={selectedBook._id} onClose={handleCloseUpdateModal} />
+          <UpdateBook book={selectedBook} onClose={handleCloseUpdateModal} />
         )}
       </Modal>
     </div>
