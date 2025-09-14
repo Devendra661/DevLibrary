@@ -30,7 +30,7 @@ export default function Books() {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`, {
-          method: 'DELETE',
+          method: "DELETE",
         });
 
         if (!response.ok) {
@@ -76,28 +76,18 @@ export default function Books() {
       </div>
 
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        key={book.bookId}
+        variants={itemVariants}
+        whileHover={{
+          scale: 1.05,
+          y: -8,
+          boxShadow:
+            "0px 0px 15px rgba(245, 245, 245, 0.8), 0px 0px 25px rgba(245, 245, 245, 0.6)", // whitesmoke glow
+        }}
+        transition={{ type: "spring", stiffness: 200, damping: 15 }}
+        className="bg-white rounded-xl p-4 shadow-md border border-gray-200 transition-all duration-300"
       >
-        {books.map((book) => (
-          <motion.div
-            key={book.bookId}
-            variants={itemVariants}
-            whileHover={{
-              scale: 1.05,
-              y: -8,
-              boxShadow:
-                "0px 0px 15px rgba(255, 69, 0, 0.8), 0px 0px 25px rgba(255, 69, 0, 0.6)",
-            }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="bg-white rounded-xl p-4 shadow-md border border-gray-200 transition-all duration-300"
-          >
-            <BookCard book={book} onMoreClick={handleMoreClick} />
-            
-          </motion.div>
-        ))}
+        <BookCard book={book} onMoreClick={handleMoreClick} />
       </motion.div>
 
       {/* Modal */}
@@ -128,11 +118,10 @@ export default function Books() {
             </p>
             <div className="flex items-center justify-center w-full text-md text-gray-700 mb-4">
               <span
-                className={`font-semibold ${
-                  selectedBook.availableCopies > 0
+                className={`font-semibold ${selectedBook.availableCopies > 0
                     ? "text-green-600"
                     : "text-red-600"
-                }`}
+                  }`}
               >
                 {selectedBook.availableCopies > 0
                   ? `Available (${selectedBook.availableCopies})`
@@ -142,32 +131,6 @@ export default function Books() {
                 <FaHeart /> {selectedBook.likes}
               </span>
             </div>
-
-            {/* Borrow Button with hover neon */}
-            {selectedBook.availableCopies > 0 && (
-              <motion.button
-                whileHover={{
-                  scale: 1.1,
-                  boxShadow: "0 0 15px rgba(255, 69, 0, 0.8)",
-                }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-orange-500 text-white px-4 py-2 rounded-md font-semibold shadow-md hover:bg-orange-600 transition-all"
-                onClick={() => {
-                  const studentId = localStorage.getItem("studentId");
-                  if (!studentId) {
-                    alert("You must be logged in to borrow a book.");
-                    return;
-                  }
-                  useLibraryStore
-                    .getState()
-                    .borrowBook(selectedBook.bookId, studentId);
-                  alert("Book request sent!");
-                  handleCloseModal();
-                }}
-              >
-                Borrow
-              </motion.button>
-            )}
           </div>
         )}
       </Modal>
