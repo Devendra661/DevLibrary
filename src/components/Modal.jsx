@@ -27,7 +27,7 @@ export default function Modal({ isOpen, onClose, children, selectedBook, onBorro
 
           {/* Modal Box */}
           <motion.div
-            className="bg-white rounded-3xl shadow-2xl w-3/4 md:max-w-lg p-6 relative z-10"
+            className="bg-white rounded-3xl shadow-2xl w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 p-6 relative z-10 max-h-[90vh] overflow-y-auto"
             initial={{ scale: 0.7, opacity: 0, y: -50, rotateX: 15 }}
             animate={{ scale: 1, opacity: 1, y: 0, rotateX: 0 }}
             exit={{ scale: 0.7, opacity: 0, y: -50, rotateX: 15 }}
