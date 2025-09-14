@@ -8,6 +8,8 @@ export default function History() {
   const { user } = useAuthStore();
   const { bookRequests, loadBooks, books } = useLibraryStore();
   const [studentHistory, setStudentHistory] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [historyPerPage] = useState(15);
 
   useEffect(() => {
     loadBooks();
@@ -44,6 +46,11 @@ export default function History() {
       setStudentHistory(combinedHistory);
     }
   }, [user, bookRequests, books]);
+
+  // Pagination logic
+  const indexOfLastHistory = currentPage * historyPerPage;
+  const indexOfFirstHistory = indexOfLastHistory - historyPerPage;
+  const currentHistory = studentHistory.slice(indexOfFirstHistory, indexOfLastHistory);
 
   const tableVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -98,7 +105,7 @@ export default function History() {
               </tr>
             </thead>
             <tbody>
-              {studentHistory.map((record, index) => (
+              {currentHistory.map((record, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {index + 1}
@@ -145,6 +152,27 @@ export default function History() {
           </table>
         </div>
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(studentHistory.length / historyPerPage)}
+        </span>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === Math.ceil(studentHistory.length / historyPerPage)}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+        >
+          Next
+        </button>
+      </div>
     </motion.div>
   );
 }

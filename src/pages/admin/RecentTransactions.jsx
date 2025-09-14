@@ -7,6 +7,8 @@ export default function RecentTransactions() {
   const { bookRequests, loadBooks } = useLibraryStore();
   const [transactions, setTransactions] = useState([]);
   const [students, setStudents] = useState([]); // State to hold student data
+  const [currentPage, setCurrentPage] = useState(1);
+  const [transactionsPerPage] = useState(15);
 
   useEffect(() => {
     loadBooks(); // This also loads borrowed and book requests
@@ -52,6 +54,11 @@ export default function RecentTransactions() {
       setTransactions(allTransactions);
     }
   }, [bookRequests, students]);
+
+  // Pagination logic
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
   const tableVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -108,7 +115,7 @@ export default function RecentTransactions() {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((record, index) => (
+              {currentTransactions.map((record, index) => (
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {index + 1}
@@ -175,6 +182,27 @@ export default function RecentTransactions() {
           </table>
         </div>
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(transactions.length / transactionsPerPage)}
+        </span>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === Math.ceil(transactions.length / transactionsPerPage)}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+        >
+          Next
+        </button>
+      </div>
     </motion.div>
   );
 }

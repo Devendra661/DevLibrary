@@ -9,6 +9,8 @@ export default function StudentTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studentsPerPage] = useState(15);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
@@ -77,6 +79,11 @@ export default function StudentTable() {
     student.emailId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Pagination logic
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = filteredStudents.slice(indexOfFirstStudent, indexOfLastStudent);
+
   return (
     <motion.div
       initial="hidden"
@@ -125,7 +132,7 @@ export default function StudentTable() {
               </tr>
             </thead>
             <tbody>
-              {filteredStudents.map((student, index) => (
+              {currentStudents.map((student, index) => (
                 <tr key={student._id} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border-b border-gray-200 text-sm text-gray-900">
                     {index + 1}
@@ -166,6 +173,27 @@ export default function StudentTable() {
           </table>
         </div>
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(filteredStudents.length / studentsPerPage)}
+        </span>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === Math.ceil(filteredStudents.length / studentsPerPage)}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md disabled:bg-gray-400"
+        >
+          Next
+        </button>
+      </div>
 
       <Modal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
         {selectedStudent && (
