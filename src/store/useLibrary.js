@@ -186,6 +186,7 @@ export const useLibraryStore = create((set) => ({
 
   updateStudent: async (studentId, formData) => {
     try {
+      console.log("Updating student with studentId:", studentId);
       const res = await fetch(`${BASE_URL}/students/update/${studentId}`, {
         method: "PUT",
         body: formData,
