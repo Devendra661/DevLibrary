@@ -36,8 +36,8 @@ export default function Books() {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        const trimmedBookId = bookId.trim();
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${trimmedBookId}`, {
+        console.log(typeof bookId);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`, {
           method: 'DELETE',
         });
 
