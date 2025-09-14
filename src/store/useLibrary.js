@@ -127,7 +127,9 @@ export const useLibraryStore = create((set) => ({
   // ✅ Delete book (API + state update)
   deleteBook: async (bookId) => {
     try {
-      const res = await fetch(`${BASE_URL}/books/${bookId}`, { method: "DELETE" });
+      const url = `${BASE_URL}/books/${bookId}`;
+      console.log("Deleting book at URL:", url);
+      const res = await fetch(url, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete book");
       set((state) => ({
         books: state.books.filter((b) => b.bookId !== bookId),
