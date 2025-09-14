@@ -308,35 +308,24 @@ app.put("/api/students/:studentId", async (req, res) => {
   }
 });
 
-app.put("/api/students/update/:studentId", upload.single('image'), async (req, res) => {
+// Example backend route
+app.put("/api/students/update/:studentId", async (req, res) => {
   try {
     const { studentId } = req.params;
-    console.log("Updating student with studentId:", studentId);
-    console.log("Request body:", req.body);
-    const student = await Student.findOne({ studentId });
+    const updatedData = req.body;
 
-    if (!student) {
-      return res.status(404).json({ message: "Student not found" });
-    }
+    const updatedStudent = await Student.findOneAndUpdate(
+      { studentId },
+      updatedData,
+      { new: true }
+    );
 
-    const updates = req.body;
-    for (const key in updates) {
-      if (key === 'password' && !updates[key]) {
-        continue; // Skip password update if it is empty
-      }
-      student[key] = updates[key];
-    }
+    if (!updatedStudent) return res.status(404).json({ message: "Student not found" });
 
-    if (req.file) {
-      student.image = `/uploads/${req.file.filename}`;
-    }
-
-    console.log("Updated student object before saving:", student);
-    await student.save();
-    res.json({ message: "Student updated successfully", student });
-  } catch (error) {
-    console.error("Error updating student:", error);
-    res.status(500).json({ message: "Server error updating student" });
+    res.json(updatedStudent);
+  } catch (err) {
+    console.error("Error updating student:", err);
+    res.status(500).json({ message: "Failed to update student" });
   }
 });
 
