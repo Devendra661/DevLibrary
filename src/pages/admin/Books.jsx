@@ -117,7 +117,7 @@ export default function Books() {
         {selectedBook && (
           <div className="flex flex-col items-center text-center">
             <img
-              src={selectedBook.coverImageUrl}
+              src={`${import.meta.env.VITE_API_URL.replace("/api", "")}${selectedBook.coverImageUrl}`}
               alt={selectedBook.title}
               className="w-32 h-48 sm:w-48 sm:h-64 object-cover rounded mb-4 shadow-md"
             />
