@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import UpdateBook from "./UpdateBook.jsx";
 
 export default function Books() {
-  const { books, loadBooks } = useLibraryStore();
+  const { books, loadBooks, deleteBook } = useLibraryStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
@@ -19,7 +19,6 @@ export default function Books() {
   }, []);
 
   const handleMoreClick = (book) => {
-    console.log("Selected Book:", book);
     setSelectedBook(book);
     setIsModalOpen(true);
   };
@@ -37,16 +36,8 @@ export default function Books() {
   const handleDeleteBook = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/books/${bookId}`, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        loadBooks(); // Reload books after deletion
-        handleCloseModal(); // Close modal after deletion
+        await deleteBook(bookId);
+        handleCloseModal();
         toast.success("Book deleted successfully!");
       } catch (error) {
         toast.error("Failed to delete book: " + error.message);
@@ -103,13 +94,12 @@ export default function Books() {
               scale: 1.05,
               y: -8,
               boxShadow:
-                "0px 0px 15px rgba(255, 69, 0, 0.8), 0px 0px 25px rgba(255, 69, 0, 0.6)",
+                "0px 0px 15px rgba(245, 245, 245, 0.8), 0px 0px 25px rgba(245, 245, 245, 0.6)", // whitesmoke glow
             }}
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
             className="bg-white rounded-xl p-4 shadow-md border border-gray-200 transition-all duration-300"
           >
             <BookCard book={book} onMoreClick={handleMoreClick} />
-            
           </motion.div>
         ))}
       </motion.div>

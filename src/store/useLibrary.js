@@ -1,7 +1,7 @@
 // src/store/useLibrary.js
 import { create } from "zustand";
 
-const BASE_URL = import.meta.env.VITE_API_URL; // <-- use env variable
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const useLibraryStore = create((set) => ({
   books: [],
@@ -27,11 +27,9 @@ export const useLibraryStore = create((set) => ({
       const res = await fetch(`${BASE_URL}/books`);
       if (!res.ok) throw new Error("Failed to fetch books");
       const books = await res.json();
-      console.log("Loaded Books:", books);
       set({ books });
       console.log("Books loaded:", books.length);
 
-      // Also load book requests
       useLibraryStore.getState().loadBookRequests();
     } catch (err) {
       console.error("Error loading books:", err);
@@ -41,7 +39,6 @@ export const useLibraryStore = create((set) => ({
   // Borrow a book
   borrowBook: async (bookId, studentId) => {
     if (!bookId || !studentId) return console.error("Book ID or Student ID missing");
-
     try {
       const res = await fetch(`${BASE_URL}/book-requests`, {
         method: "POST",
@@ -88,7 +85,7 @@ export const useLibraryStore = create((set) => ({
           ),
           bookRequests: state.bookRequests.map((req) =>
             req._id === returnedBorrowedBook._id
-              ? { ...req, status: 'returned', returnedDate: returnedBorrowedBook.returnedDate }
+              ? { ...req, status: "returned", returnedDate: returnedBorrowedBook.returnedDate }
               : req
           ),
         }));
@@ -127,16 +124,44 @@ export const useLibraryStore = create((set) => ({
     }
   },
 
-  addBook: (book) => {
-    set((state) => ({ books: [book, ...state.books] }));
+  // ✅ Delete book (API + state update)
+  deleteBook: async (bookId) => {
+    try {
+      const res = await fetch(`${BASE_URL}/books/${bookId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete book");
+      set((state) => ({
+        books: state.books.filter((b) => b.bookId !== bookId),
+      }));
+      console.log("Book deleted:", bookId);
+    } catch (err) {
+      console.error("Error deleting book:", err);
+    }
   },
 
-  updateBook: (updatedBook) => {
-    set((state) => ({
-      books: state.books.map((book) =>
-        book.bookId === updatedBook.bookId ? updatedBook : book
-      ),
-    }));
+  // ✅ Update book (API + state update)
+  updateBook: async (updatedBook) => {
+    try {
+      const res = await fetch(`${BASE_URL}/books/${updatedBook.bookId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedBook),
+      });
+      if (!res.ok) throw new Error("Failed to update book");
+      const savedBook = await res.json();
+      set((state) => ({
+        books: state.books.map((b) =>
+          b.bookId === savedBook.bookId ? savedBook : b
+        ),
+      }));
+      console.log("Book updated:", savedBook.bookId);
+    } catch (err) {
+      console.error("Error updating book:", err);
+    }
+  },
+
+  // Local helpers
+  addBook: (book) => {
+    set((state) => ({ books: [book, ...state.books] }));
   },
 
   addStudent: (student) => {
