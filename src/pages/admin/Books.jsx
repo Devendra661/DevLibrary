@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import BookCard from "../../components/BookCard.jsx";
 import Modal from "../../components/Modal.jsx";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaSearch } from "react-icons/fa";
 import { toast } from "react-toastify";
 import UpdateBook from "./UpdateBook.jsx";
 
@@ -13,6 +13,7 @@ export default function Books() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     loadBooks();
@@ -53,6 +54,13 @@ export default function Books() {
     setIsModalOpen(false);
   };
 
+  const filteredBooks = books.filter(
+    (b) =>
+      b.title.toLowerCase().includes(search.toLowerCase()) ||
+      b.author.toLowerCase().includes(search.toLowerCase()) ||
+      b.category.toLowerCase().includes(search.toLowerCase())
+  );
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -82,6 +90,18 @@ export default function Books() {
         </p>
       </div>
 
+      {/* Search Bar */}
+      <div className="relative mb-6">
+        <input
+          type="text"
+          className="input input-bordered w-full pl-10 pr-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300"
+          placeholder="Search by title, author, or category..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+      </div>
+
       {/* Books Grid */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
@@ -89,7 +109,7 @@ export default function Books() {
         initial="hidden"
         animate="visible"
       >
-        {books.map((book) => (
+        {filteredBooks.map((book) => (
           <motion.div
             key={book._id} // ✅ use Mongo _id as React key
             variants={itemVariants}
