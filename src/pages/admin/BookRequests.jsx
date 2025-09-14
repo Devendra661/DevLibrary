@@ -7,7 +7,12 @@ export default function BookRequests() {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/book-requests`)
       .then((res) => res.json())
-      .then((data) => setBookRequests(data));
+      .then((data) => {
+        const filteredData = data.filter(
+          (request) => request.status === "pending" || request.status === "approved"
+        );
+        setBookRequests(filteredData);
+      });
   }, []);
 
   const handleApprove = (id) => {
@@ -30,11 +35,7 @@ export default function BookRequests() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "rejected" }),
     }).then(() => {
-      setBookRequests(
-        bookRequests.map((req) =>
-          req._id === id ? { ...req, status: "rejected" } : req
-        )
-      );
+      setBookRequests(bookRequests.filter((req) => req._id !== id));
     });
   };
 
@@ -47,11 +48,7 @@ export default function BookRequests() {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Book returned successfully") {
-          setBookRequests(
-            bookRequests.map((req) =>
-              req._id === requestId ? { ...req, status: "returned" } : req
-            )
-          );
+          setBookRequests(bookRequests.filter((req) => req._id !== requestId));
         } else {
           console.error("Error returning book:", data.message);
         }
